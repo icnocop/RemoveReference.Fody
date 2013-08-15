@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>RemoveReference.Fody</id>
+    <version>$version$</version>
+    <title>RemoveReference.Fody</title>
+    <authors>Rami Abughazaleh</authors>
+    <owners>Rami Abughazaleh</owners>
+    <projectUrl>http://github.com/icnocop/RemoveReference.Fody</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://raw.github.com/icnocop/RemoveReference.Fody/master/Icons/delete-link-32.png</iconUrl>
+    <description>Fody add-in for removing references from an assembly.</description>
+    <tags>ILWeaving, Fody, Cecil, AOP</tags>
+    <dependencies>
+      <dependency id="Fody"/>
+    </dependencies>
+  </metadata>
+</package>
