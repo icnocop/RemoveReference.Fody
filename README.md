@@ -1,0 +1,2 @@
+RemoveReference.Fody
+====================
