@@ -1,5 +1,6 @@
-﻿using Mono.Cecil;
-using System;
+﻿using System;
+using System.Linq;
+using Mono.Cecil;
 
 namespace RemoveReference.Fody
 {
@@ -36,6 +37,21 @@ namespace RemoveReference.Fody
                     }
                 }
             }
+
+            RemoveReference();
+        }
+
+        private void RemoveReference()
+        {
+            AssemblyNameReference referenceToRemove = ModuleDefinition.AssemblyReferences.FirstOrDefault(x => x.Name == "RemoveReference");
+            if (referenceToRemove == null)
+            {
+                LogInfo("\tNo reference to 'RemoveReference' found. References not modified.");
+                return;
+            }
+
+            ModuleDefinition.AssemblyReferences.Remove(referenceToRemove);
+            LogInfo("\tRemoved reference to 'RemoveReference'.");
         }
     }
 }

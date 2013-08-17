@@ -10,7 +10,13 @@ namespace RemoveReference.Fody.Tests
     {
         public static Assembly WeaveAssembly()
         {
-            string assemblyPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
+            string configurationName = "Release";
+
+            #if DEBUG
+                configurationName = "Debug";
+            #endif
+
+            string assemblyPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\AssemblyToProcess\bin", configurationName, "AssemblyToProcess.dll"));
 
             string newAssembly = assemblyPath.Replace(".dll", "2.dll");
 
