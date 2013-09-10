@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 
@@ -20,22 +21,30 @@ namespace RemoveReference.Fody
 
         public void Execute()
         {
-            foreach (CustomAttribute customAttribute in ModuleDefinition.Assembly.CustomAttributes)
+            var namesToRemove = new List<string>();
+            var attributesToRemove = new List<CustomAttribute>();
+            foreach (var customAttribute in ModuleDefinition.Assembly.CustomAttributes)
             {
                 if (customAttribute.AttributeType.Name == "RemoveReferenceAttribute")
                 {
-                    for (int i = ModuleDefinition.AssemblyReferences.Count - 1; i >= 0; i--)
-                    {
-                        AssemblyNameReference assemblyNameReference = ModuleDefinition.AssemblyReferences[i];
-
-                        if (assemblyNameReference.FullName == (string)customAttribute.ConstructorArguments[0].Value)
-                        {
-                            LogInfo(assemblyNameReference.ToString());
-
-                            ModuleDefinition.AssemblyReferences.Remove(assemblyNameReference);
-                        }
-                    }
+                    namesToRemove.Add((string)customAttribute.ConstructorArguments[0].Value);
+                    attributesToRemove.Add(customAttribute);
                 }
+            }
+
+            foreach (var customAttribute in attributesToRemove)
+            {
+                ModuleDefinition.Assembly.CustomAttributes.Remove(customAttribute);
+            }
+
+            var referencesToRemove = ModuleDefinition.AssemblyReferences
+                                         .Where(x => namesToRemove.Contains(x.FullName))
+                                         .Distinct()
+                                         .ToList();
+            foreach (var assemblyNameReference in referencesToRemove)
+            {
+                LogInfo(assemblyNameReference.ToString());
+                ModuleDefinition.AssemblyReferences.Remove(assemblyNameReference);
             }
 
             RemoveReference();
